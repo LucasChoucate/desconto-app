@@ -1,4 +1,3 @@
-
 from src.models.desconto import IDesconto
 
 class Pedido:
