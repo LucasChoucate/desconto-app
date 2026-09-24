@@ -1,11 +1,15 @@
-from src.models.desconto import IDesconto
+from src.models.pedido import Pedido
 
-class Pedido:
-    def __init__(self, cliente, desconto: IDesconto):
-        self.cliente = cliente
-        self.desconto = desconto
-        self.valor_original = 0.0
+class PedidoService:
+    """Classe de servoço para processar pedido e aplicar descontos"""
 
-    def valor_final(self, valor) -> float:
-        self.valor_original = valor
-        return self.valor_original - self.desconto.calcular(self.valor_original)
+    def __init__(self):
+        self.pedidos=[]
+
+    def adicionar_pedido(self,pedido:Pedido):
+        self.pedidos.append(pedido)
+
+    def processar_pedido(self):
+        for pedido in self.pedidos:
+            print(f"Cliente: {pedido.cliente}")
+            print(f"Valor final: {pedido.valor_final(pedido.valor_original)}")
