@@ -1,12 +1,18 @@
+from app.dtos.criar_pedido_input_dto import CriarPedidoInputDTO
+from app.presenters.pedido_presenter import PedidoPresenter
 from app.use_cases.criar_pedido import CriarPedido
 
 
 class PedidoController:
-    def __init__(self, criar_pedido_use_case: CriarPedido):
+    def __init__(self, criar_pedido_use_case: CriarPedido, presenter: PedidoPresenter):
         self.criar_pedido_use_case = criar_pedido_use_case
+        self.presenter = presenter
 
     def criar_pedido(self, cliente: str, valor_original: float, tipo_desconto: str):
-        return self.criar_pedido_use_case.executar(cliente, valor_original, tipo_desconto)
+        input_dto = CriarPedidoInputDTO(cliente, valor_original, tipo_desconto)
+        output_dto = self.criar_pedido_use_case.executar(input_dto)
+        return self.presenter.apresentar(output_dto)
 
     def listar_pedidos(self):
-        return self.criar_pedido_use_case.listar_pedidos()
+        output_dtos = self.criar_pedido_use_case.listar_pedidos()
+        return self.presenter.apresentar_lista(output_dtos)
