@@ -1,6 +1,6 @@
 from app.dtos.criar_pedido_input_dto import CriarPedidoInputDTO
 from app.dtos.criar_pedido_output_dto import CriarPedidoOutputDTO
-from app.entities.desconto import DescontoNormal, DescontoVIP, DescontoPremium
+from app.entities.desconto_factory import DescontoFactory
 from app.entities.pedido import Pedido
 from app.gateways.pedido_gateway import IPedidoGateway
 
@@ -11,15 +11,7 @@ class CriarPedido:
 
     def executar(self, input_dto: CriarPedidoInputDTO) -> CriarPedidoOutputDTO:
         tipo_desconto = input_dto.tipo_desconto.lower().strip()
-
-        if tipo_desconto == "normal":
-            desconto = DescontoNormal()
-        elif tipo_desconto == "vip":
-            desconto = DescontoVIP()
-        elif tipo_desconto == "premium":
-            desconto = DescontoPremium()
-        else:
-            raise ValueError("Tipo de desconto inválido")
+        desconto = DescontoFactory.criar(tipo_desconto)
 
         pedido = Pedido(input_dto.cliente, input_dto.valor_original, desconto)
         self.pedido_gateway.salvar(pedido, input_dto.tipo_desconto)
